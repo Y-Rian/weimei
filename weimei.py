@@ -88,7 +88,7 @@ def get_img_link(url):
     egg: http://www.55156.com/weimei/9487_5.html
 '''
 def save_orage_img(url):
-    # orage_link = []
+
     page_link.append(url)
     ua = random.choice(UserAgent_List)
     header = {
