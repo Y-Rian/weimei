@@ -56,7 +56,7 @@ def get_page_link(url):
     header = {
         'User-Agent': ua
     }
-    print('get_page_link ',header)
+    # print('get_page_link ',header)
     page_link.append(url)
     response = requests.get(url,headers=header)
     response.encoding = 'utf-8'
@@ -88,7 +88,7 @@ def get_img_link(url):
     img_link = html.xpath('//div[@class="listBox"]/ul/li/a/@href').extract()
     return img_link
 
-def save_orage_img(url):
+def save_origin_img(url):
     """
     获取图片的真实地址并下载 保存
     :param url:   每个图片的链接的细地址 egg: http://www.55156.com/weimei/weimeibeijing/148160.html
@@ -99,40 +99,39 @@ def save_orage_img(url):
     header = {
         'User-Agent': ua
     }
-    print('save_orage_img',header)
+    # print('save_orage_img',header)
     response = requests.get(url,headers=header)
     response.encoding = 'utf-8'
     html = Selector(response.text)
-    orage_url = html.xpath('//div[@class="articleBody"]/p/a/img/@src')[0].extract()
-    orage_name = html.xpath('//div[@class="articleBody"]/p/a/img/@alt')[0].extract()
+    origin_url = html.xpath('//div[@class="articleBody"]/p/a/img/@src')[0].extract()
+    origin_name = html.xpath('//div[@class="articleBody"]/p/a/img/@alt')[0].extract()
     title = html.xpath('//div[@class="articleTitle"]/h1/text()')[0].extract()
-    res = requests.get(orage_url,headers=header)
-    orage = res.content
+    res = requests.get(origin_url,headers=header)
+    origin = res.content
     try:
         if '(' not in title:
             path = os.path.abspath('.') + '\\imgages\\' + title + '\\'
             if not os.path.exists(path):
                 os.makedirs(path)
-            file = path + orage_name + '.jpg'
+            file = path + origin_name + '.jpg'
             with open(file, 'wb') as f:
-                f.write(orage)
+                f.write(origin)
             print('%s  首页写入完成' % title)
 
         else:
             dir = title.split('(')[:-1][0]
             path = os.path.abspath('.') + '\\imgages\\' + dir + '\\'
             # print("path1",path)
-            # if os.path.exists(path):
-            file = path + orage_name + '.jpg'
+            file = path + origin_name + '.jpg'
             with open(file, 'wb') as f:
-                f.write(orage)
+                f.write(origin)
                 print('%s  写入完成' % title)
 
         next_page = html.xpath('//div[@class="pages"]/ul/li[last()]/a/@href')[0].extract()
 
         if '#' not in next_page:
             new_url = urljoin(url,next_page)
-            save_orage_img(new_url)
+            save_origin_img(new_url)
             print('下一页 %s' %next_page)
     except Exception as e:
         print('只有一张')
@@ -151,7 +150,7 @@ def test_get_img_link():
 
 def test3():
     page = 'http://www.55156.com/weimei/9487_5.html'
-    save_orage_img(page)
+    save_origin_img(page)
 
 
 def main():
@@ -159,7 +158,8 @@ def main():
     for page in link:
         img_link = get_img_link(page)
         for img in img_link:
-            save_orage_img(img)
+            save_origin_img(img)
         # break
 
-main()
+if __name__ == '__main__':
+    main()
