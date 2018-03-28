@@ -44,12 +44,14 @@ UserAgent_List = [
 
 page_link = []
 
-'''
-    获取当前图片类的所有页数 
-    返回list
-    egg:http://www.55156.com/weimei/list_40_85.html
-'''
+
 def get_page_link(url):
+    """
+    获取当前图片类的所有页数
+    :param url:  传入url   egg:   http://www.55156.com/weimei
+    :return: page_link 是一个list
+
+    """
     ua = random.choice(UserAgent_List)
     header = {
         'User-Agent': ua
@@ -67,12 +69,13 @@ def get_page_link(url):
 
     return page_link
 
-'''
-    获取每一页的图片链接
-    返回list
-    egg:http://www.55156.com/weimei/9487.html
-'''
+
 def get_img_link(url):
+    """
+    获取每一页的图片链接
+    :param url:   egg:http://www.55156.com/weimei/9487.html
+    :return: img_link 返回的是一个list
+    """
     img_link = []
     img_link.append(url)
     ua = random.choice(UserAgent_List)
@@ -84,11 +87,13 @@ def get_img_link(url):
     html = Selector(response.text)
     img_link = html.xpath('//div[@class="listBox"]/ul/li/a/@href').extract()
     return img_link
-'''
-    egg: http://www.55156.com/weimei/9487_5.html
-'''
-def save_orage_img(url):
 
+def save_orage_img(url):
+    """
+    获取图片的真实地址并下载 保存
+    :param url:   每个图片的链接的细地址 egg: http://www.55156.com/weimei/weimeibeijing/148160.html
+    :return:
+    """
     page_link.append(url)
     ua = random.choice(UserAgent_List)
     header = {
